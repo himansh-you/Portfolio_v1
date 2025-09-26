@@ -1,0 +1,9 @@
+{
+    "name": "Himanshu",
+    "greeting": "Hey There, This is Himanshu,",
+    "title": "and I am a software engineer",
+    "profileImage": "/images/hero/profile.jpg",
+    "resumeUrl": "/resume/Himanshu_Gupta_Resume.pdf",
+    "techStack": ["React", "NPM", "git", "C++", "Python", "Java", "langchain"]
+  }
+  

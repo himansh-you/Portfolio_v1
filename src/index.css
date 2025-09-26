@@ -1,0 +1,153 @@
+@import "tailwindcss";
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
+:root {
+  --font-primary: 'Lilita One', sans-serif;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: #212121;
+  background-color: #ffffff;
+}
+
+.scroll-offset {
+  scroll-margin-top: 4rem;
+}
+
+/* Force Lilita One font - remove cursive fallback */
+.font-lilita {
+  font-family: 'Lilita One', sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Animation utilities */
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Container utility */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .container { 
+    padding: 0 2rem; 
+  }
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+@media (min-width: 768px) {
+  .section { 
+    padding: 6rem 0; 
+  }
+}
+
+/* Hover animation for the RoughJS canvas */
+.canvas-hoverable {
+  transition: transform 0.2s, opacity 0.2s;
+}
+.group:hover .canvas-hoverable {
+  transform: scale(1.05) translate(-10px, -10px);
+  opacity: 1;
+}
+
+/* Infinite marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 60s linear infinite;
+}
+
+/* Pause animation on hover */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Alternative speeds for different marquee sections if needed */
+.animate-marquee-fast {
+  animation: marquee 40s linear infinite;
+}
+
+.animate-marquee-slow {
+  animation: marquee 80s linear infinite;
+}
+
+/* Custom Swiper Styles */
+.skills-swiper {
+  padding: 20px 0;
+}
+
+.skills-swiper .swiper-button-next,
+.skills-swiper .swiper-button-prev {
+  color: #f97316;
+  background: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.skills-swiper .swiper-button-next:after,
+.skills-swiper .swiper-button-prev:after {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.skills-swiper .swiper-pagination-bullet {
+  background: #d1d5db;
+  opacity: 1;
+}
+
+.skills-swiper .swiper-pagination-bullet-active {
+  background: #f97316;
+}
