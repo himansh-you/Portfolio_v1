@@ -1,4 +1,20 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const API = 'https://api.twitter.com/2';
+
+async function loadFallback() {
+  try {
+    const p = path.join(__dirname, '../../public/recentPosts.json');
+    const raw = await readFile(p, 'utf8');
+    const json = JSON.parse(raw);
+    return Array.isArray(json?.posts) ? json.posts : [];
+  } catch {
+    return [];
+  }
+}
 
 export default async function handler(req, res) {
   try {
@@ -25,10 +41,16 @@ export default async function handler(req, res) {
     });
     params.set('exclude', 'replies,retweets');
 
-
     const tResp = await fetch(`${API}/users/${userId}/tweets?${params.toString()}`, {
       headers: { Authorization: `Bearer ${bearer}` }
     });
+
+    if (tResp.status === 429) {
+      const posts = await loadFallback();
+      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
+      return res.status(200).json({ posts });
+    }
+
     if (!tResp.ok) return res.status(tResp.status).json({ error: await tResp.text() });
     const data = await tResp.json();
 

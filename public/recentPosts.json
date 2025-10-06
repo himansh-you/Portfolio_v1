@@ -1,0 +1,12 @@
+{
+    "posts": [
+      {
+        "id": "x_fallback1",
+        "platform": "x",
+        "text": "Welcome to my portfolio! Follow me on X for updates.",
+        "dateISO": "2024-10-01T00:00:00.000Z",
+        "link": "https://x.com/heyhimanshyou",
+        "imageUrl": null
+      }
+    ]
+  }
