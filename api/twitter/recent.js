@@ -1,3 +1,4 @@
+// api/twitter/recent.js
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -28,13 +29,20 @@ export default async function handler(req, res) {
     const uResp = await fetch(`${API}/users/by/username/${encodeURIComponent(username)}`, {
       headers: { Authorization: `Bearer ${bearer}` }
     });
+
+    if (uResp.status === 429) {
+      const posts = await loadFallback();
+      res.setHeader('Cache-Control', 's-maxage=1200, stale-while-revalidate=86400');
+      return res.status(200).json({ posts });
+    }
     if (!uResp.ok) return res.status(uResp.status).json({ error: await uResp.text() });
+
     const u = await uResp.json();
     const userId = u?.data?.id;
     if (!userId) return res.status(404).json({ error: 'User not found' });
 
     const params = new URLSearchParams({
-      max_results: String(Math.max(limit, 5)),
+      max_results: String(limit), // keep minimal
       'tweet.fields': 'created_at,attachments,text',
       expansions: 'attachments.media_keys',
       'media.fields': 'url,preview_image_url,type,width,height'
@@ -47,16 +55,14 @@ export default async function handler(req, res) {
 
     if (tResp.status === 429) {
       const posts = await loadFallback();
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600');
+      res.setHeader('Cache-Control', 's-maxage=1200, stale-while-revalidate=86400');
       return res.status(200).json({ posts });
     }
-
     if (!tResp.ok) return res.status(tResp.status).json({ error: await tResp.text() });
-    const data = await tResp.json();
 
+    const data = await tResp.json();
     const media = (data.includes?.media) || [];
-    const mediaMap = new Map();
-    media.forEach((m) => mediaMap.set(m.media_key, m));
+    const mediaMap = new Map(media.map(m => [m.media_key, m]));
 
     const posts = (data.data || []).slice(0, limit).map((t) => {
       const key = t.attachments?.media_keys?.[0];
@@ -72,7 +78,7 @@ export default async function handler(req, res) {
       };
     });
 
-    res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=86400');
+    res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
     res.status(200).json({ posts });
   } catch (e) {
     res.status(500).json({ error: e?.message || 'Unknown error' });
