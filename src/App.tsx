@@ -6,7 +6,7 @@ import About from './components/About';
 import Certificates from './components/Certificates';
 import AllProjects from './pages/AllProjects';
 import RecentPosts from './components/RecentPosts';
-
+import Contacts from './components/Contacts';
 
 // Home page component
 const HomePage = () => (
@@ -31,11 +31,8 @@ const HomePage = () => (
       <RecentPosts username="heyhimanshyou" />
     </section>
     
-    <section id="contact" className="scroll-offset min-h-screen bg-white flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="font-lilita text-4xl text-gray-900 mb-4">Contact Section</h1>
-        <p className="text-gray-600">This will be the contact component</p>
-      </div>
+    <section id="contact" className="scroll-offset">
+      <Contacts />
     </section>
   </>
 );

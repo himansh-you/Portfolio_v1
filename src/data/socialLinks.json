@@ -1,44 +1,44 @@
 {
-    "socialLinks": [
-      {
-        "id": "email",
-        "platform": "Email",
-        "icon": "✉️",
-        "label": "Email",
-        "tagline": "Drop me an email",
-        "url": "mailto:himanshu@example.com",
-        "bgColor": "bg-email",
-        "textColor": "text-white"
-      },
-      {
-        "id": "linkedin",
-        "platform": "LinkedIn", 
-        "icon": "💼",
-        "label": "LinkedIn",
-        "tagline": "Let's Connect",
-        "url": "https://linkedin.com/in/himanshu",
-        "bgColor": "bg-linkedin",
-        "textColor": "text-white"
-      },
-      {
-        "id": "github",
-        "platform": "GitHub",
-        "icon": "🚀",
-        "label": "GitHub",
-        "tagline": "Yes I build!",
-        "url": "https://github.com/himanshu",
-        "bgColor": "bg-github",
-        "textColor": "text-white"
-      },
-      {
-        "id": "twitter",
-        "platform": "Twitter",
-        "icon": "🐦",
-        "label": "Twitter", 
-        "tagline": "do read the bio",
-        "url": "https://twitter.com/himanshu",
-        "bgColor": "bg-green-social",
-        "textColor": "text-white"
-      }
-    ]
-  }
+  "socialLinks": [
+    {
+      "id": "email",
+      "platform": "Email",
+      "icon": "✉️",
+      "label": "Email",
+      "tagline": "Drop me an email",
+      "url": "mailto:your.email@example.com",
+      "bgColor": "bg-email",
+      "textColor": "text-white"
+    },
+    {
+      "id": "linkedin",
+      "platform": "LinkedIn", 
+      "icon": "💼",
+      "label": "LinkedIn",
+      "tagline": "Let's Connect",
+      "url": "https://linkedin.com/in/your-profile",
+      "bgColor": "bg-linkedin",
+      "textColor": "text-white"
+    },
+    {
+      "id": "github",
+      "platform": "GitHub",
+      "icon": "🚀",
+      "label": "GitHub",
+      "tagline": "Yes I build!",
+      "url": "https://github.com/your-username",
+      "bgColor": "bg-github",
+      "textColor": "text-white"
+    },
+    {
+      "id": "twitter",
+      "platform": "Twitter",
+      "icon": "🐦",
+      "label": "Twitter", 
+      "tagline": "I do read the DMs",
+      "url": "https://twitter.com/your-handle",
+      "bgColor": "bg-green-social",
+      "textColor": "text-white"
+    }
+  ]
+}
