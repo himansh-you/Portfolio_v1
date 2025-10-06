@@ -1,4 +1,3 @@
-// api/twitter/recent.js
 const API = 'https://api.twitter.com/2';
 
 export default async function handler(req, res) {
