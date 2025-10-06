@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     if (!userId) return res.status(404).json({ error: 'User not found' });
 
     const params = new URLSearchParams({
-      max_results: String(limit), // keep minimal
+      max_results: String(limit, 5), // keep minimal
       'tweet.fields': 'created_at,attachments,text',
       expansions: 'attachments.media_keys',
       'media.fields': 'url,preview_image_url,type,width,height'
