@@ -23,8 +23,8 @@ export default async function handler(req, res) {
       expansions: 'attachments.media_keys',
       'media.fields': 'url,preview_image_url,type,width,height'
     });
-    params.append('exclude', 'replies');
-    params.append('exclude', 'retweets');
+    params.set('exclude', 'replies,retweets');
+
 
     const tResp = await fetch(`${API}/users/${userId}/tweets?${params.toString()}`, {
       headers: { Authorization: `Bearer ${bearer}` }
