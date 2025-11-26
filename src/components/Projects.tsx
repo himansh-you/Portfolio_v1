@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import rough from 'roughjs/bin/rough';
 import SketchButton from './SketchButton';
 
 interface Project {
@@ -26,8 +27,11 @@ const Projects: React.FC = () => {
   const navigate = useNavigate();
   const [imageLoading, setImageLoading] = useState<Record<number, boolean>>({});
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [fontLoaded, setFontLoaded] = useState(false);
+  const canvasRefs = useRef<Record<number, HTMLCanvasElement | null>>({});
 
-  const projects: Project[] = [
+  const projects: Project[] = useMemo(() => [
     {
       id: 1,
       title: "Labelly",
@@ -35,7 +39,7 @@ const Projects: React.FC = () => {
       technologies: ["React Native", "Expo", "Flask", "Firebase", "Sonar API"],
       githubUrl: "https://github.com/himansh-you/Labelly.git",
       liveUrl: "https://labelly--40iw2plma1.expo.app/onboarding",
-      imageUrl: "/src/assets/images/placeholder.png"
+      imageUrl: "/src/assets/images/labelly_mockup.png"
     },
     {
       id: 2,
@@ -44,7 +48,7 @@ const Projects: React.FC = () => {
       technologies: ["Python", "TensorFlow", "Keras", "Pandas", "NumPy", "scikit-learn"],
       githubUrl: "https://github.com/himansh-you/BSE_stock_predictor.git",
       liveUrl: "",
-      imageUrl: "/src/assets/images/placeholder.png"
+      imageUrl: "/src/assets/images/BSE_pred_mockup.png"
     },
     {
       id: 3,
@@ -53,9 +57,9 @@ const Projects: React.FC = () => {
       technologies: ["MongoDB", "Express.js", "React.js", "Node.js", "WebSocket", "Google OAuth"],
       githubUrl: "https://github.com/himansh-you/CollabSphere.git",
       liveUrl: "",
-      imageUrl: "/src/assets/images/placeholder.png"
+      imageUrl: "/src/assets/images/Collabshpere_mockup.png"
     }
-  ];
+  ], []);
 
 
 
@@ -86,8 +90,70 @@ const Projects: React.FC = () => {
     setImageLoading(prev => ({ ...prev, [projectId]: true }));
   };
 
+  // Font loading effect
+  useEffect(() => {
+    const loadFont = async () => {
+      try {
+        if ('fonts' in document) {
+          await document.fonts.load('400 20px "Lilita One"');
+          setFontLoaded(true);
+        } else {
+          setTimeout(() => setFontLoaded(true), 300);
+        }
+      } catch {
+        console.warn('Font loading failed, using fallback');
+        setFontLoaded(true);
+      }
+    };
+    loadFont();
+  }, []);
+
+  // Draw rough.js border for each project with simple rectangles
+  useEffect(() => {
+    if (!fontLoaded) return;
+
+    const drawBorders = () => {
+      projects.forEach((project) => {
+        const canvas = canvasRefs.current[project.id];
+        if (!canvas) return;
+
+        // Get the actual container dimensions
+        const container = canvas.parentElement;
+        if (!container) return;
+
+        const rect = container.getBoundingClientRect();
+        const canvasWidth = rect.width;
+        const canvasHeight = rect.height;
+
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const rc = rough.canvas(canvas);
+
+        // Draw simple rectangle outline like the buttons
+        rc.rectangle(8, 8, canvasWidth - 16, canvasHeight - 16, {
+          stroke: '#000',
+          strokeWidth: 4,
+          roughness: 1.8,
+          bowing: 1,
+          seed: hoveredProject === project.id ? 2 : 1,
+        });
+      });
+    };
+
+    drawBorders();
+    
+    // Redraw on window resize
+    window.addEventListener('resize', drawBorders);
+    return () => window.removeEventListener('resize', drawBorders);
+  }, [fontLoaded, hoveredProject, projects]);
+
   return (
-    <section className="section bg-white py-24">
+    <section className="section bg-transparent py-24">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Section Header */}
         <div className="px-8 sm:px-6 lg:px-8" style={{ marginBottom: '20px' }}>
@@ -108,28 +174,50 @@ const Projects: React.FC = () => {
                 <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
                   {/* Project Image - Always on left with drop shadow and constrained scaling */}
                   <div className="lg:w-1/2">
-                    <div className="relative aspect-video bg-gradient-to-br from-orange-100 to-yellow-100 rounded-2xl overflow-hidden border-4 border-gray-900 shadow-2xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-3xl">
-                      {/* Loading State */}
-                      {imageLoading[project.id] && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gray-200 animate-pulse z-10">
-                          <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div 
+                      className="relative aspect-video transform transition-all duration-300 hover:scale-[1.02]"
+                      onMouseEnter={() => setHoveredProject(project.id)}
+                      onMouseLeave={() => setHoveredProject(null)}
+                    >
+                      {/* Image Container */}
+                      <div className="absolute inset-0 z-0" style={{ padding: '8px' }}>
+                        <div className="relative w-full h-full bg-gradient-to-br from-orange-100 to-yellow-100 overflow-hidden shadow-2xl">
+                          {/* Loading State */}
+                          {imageLoading[project.id] && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-gray-200 animate-pulse z-10">
+                              <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                          )}
+                          
+                          {/* Image or Fallback */}
+                          {imageErrors[project.id] ? (
+                            <ProjectImageFallback title={project.title} />
+                          ) : (
+                            <img 
+                              src={project.imageUrl} 
+                              alt={`Screenshot showcasing the ${project.title} project interface and features`}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                              onLoad={() => handleImageLoad(project.id)}
+                              onError={() => handleImageError(project.id)}
+                              onLoadStart={() => handleImageStart(project.id)}
+                            />
+                          )}
                         </div>
-                      )}
+                      </div>
                       
-                      {/* Image or Fallback */}
-                      {imageErrors[project.id] ? (
-                        <ProjectImageFallback title={project.title} />
-                      ) : (
-                        <img 
-                          src={project.imageUrl} 
-                          alt={`Screenshot showcasing the ${project.title} project interface and features`}
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                          onLoad={() => handleImageLoad(project.id)}
-                          onError={() => handleImageError(project.id)}
-                          onLoadStart={() => handleImageStart(project.id)}
-                        />
-                      )}
+                      {/* Rough.js outline on top */}
+                      <canvas
+                        ref={(el) => {
+                          canvasRefs.current[project.id] = el;
+                        }}
+                        className="absolute inset-0 pointer-events-none z-10"
+                        style={{ 
+                          width: '100%',
+                          height: '100%',
+                          filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.1))'
+                        }}
+                      />
                     </div>
                   </div>
 

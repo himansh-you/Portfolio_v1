@@ -45,7 +45,7 @@ const Contacts: React.FC = () => {
   const items = (linksData as { socialLinks: Social[] }).socialLinks;
   
   return (
-    <section className="section bg-white py-24">
+    <section className="section bg-transparent py-24">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Section Header */}
         <div className="px-8 sm:px-6 lg:px-8 mb-12">

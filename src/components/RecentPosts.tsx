@@ -33,7 +33,7 @@ const RecentPosts: React.FC<{ username?: string }> = ({ username = 'heyhimanshyo
     new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
-    <section className="section bg-white py-24">
+    <section className="section bg-transparent py-24">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="px-8 sm:px-6 lg:px-8 mb-8">
           <h2 className="font-lilita text-4xl sm:text-5xl lg:text-6xl text-gray-900">Recent Posts</h2>

@@ -1,0 +1,75 @@
+[
+    {
+      "id": 1,
+      "title": "AWS Solutions Architect Associate",
+      "issuer": "Codemithra Technologies, ETHNUS",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/certificates/aws-solutions-architect.jpeg",
+      "link": "/src/assets/images/certificates/AWS_Solution_Architect.pdf"
+    },
+    {
+      "id": 2,
+      "title": "MERN Full Stack Development",
+      "issuer": "Codemithra Technologies, ETHNUS",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/certificates/mern-cert.jpeg",
+      "link": "/src/assets/images/certificates/MERN_FULL_STACK.pdf"
+    },
+    {
+      "id": 3,
+      "title": "Cisco Networking Certificate",
+      "issuer": "Cisco",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/certificates/cisco-cert.jpeg",
+      "link": "/src/assets/images/certificates/Cisco certificate.pdf"
+    },
+    {
+      "id": 4,
+      "title": "Cisco Cybersecurity Essentials",
+      "issuer": "Cisco",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/certificates/cisco-cybersecurity.jpeg",
+      "link": "/src/assets/images/certificates/CISCO_CyberSecurity_Essentials.pdf"
+    },
+    {
+      "id": 5,
+      "title": "Cloud Computing",
+      "issuer": "NPTEL",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/certificates/cloud-computing.jpeg",
+      "link": "/src/assets/images/certificates/Cloud Computing.pdf"
+    },
+    {
+      "id": 6,
+      "title": "Flipkart Grid 6.0",
+      "issuer": "Flipkart",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/certificates/flipkart-grid.jpeg",
+      "link": "/src/assets/images/certificates/Flipkart Grid 6.0.pdf"
+    },
+    {
+      "id": 7,
+      "title": "Marketing Analytics",
+      "issuer": "NPTEL",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/certificates/marketing-analytic.jpeg",
+      "link": "/src/assets/images/certificates/Marketing Analytics.pdf"
+    },
+    {
+      "id": 8,
+      "title": "Amazon Hackathon Season 4",
+      "issuer": "Amazon",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/certificates/amazon-hackon.jpeg",
+      "link": "/src/assets/images/certificates/amazon hackopn Season 4.pdf"
+    },
+    {
+      "id": 9,
+      "title": "Amazon ML Challenge - 108th Position",
+      "issuer": "Amazon Machine Learning",
+      "date": "2024",
+      "imageUrl": "/src/assets/images/AmazonMLC.png",
+      "link": "#",
+      "description": "Secured 108th position after 32 hours of intense coding with minimal breaks. Achieved a SMAPE score of 44.09 on evaluation data and 41.8 on local testing. The thrill of participating in such high-intensity hackathons is truly unmatched!"
+    }
+  ]

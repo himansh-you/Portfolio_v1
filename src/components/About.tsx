@@ -14,6 +14,8 @@ interface TabContent {
 const About: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('me');
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [isRectangleHovered, setIsRectangleHovered] = useState(false);
+  const [isCircleHovered, setIsCircleHovered] = useState(false);
   const rectangleCanvasRef = useRef<HTMLCanvasElement>(null);
   const circleCanvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -75,7 +77,7 @@ const About: React.FC = () => {
         } else {
           setTimeout(() => setFontLoaded(true), 300);
         }
-      } catch (error) {
+      } catch {
         console.warn('Font loading failed, using fallback');
         setFontLoaded(true);
       }
@@ -83,7 +85,7 @@ const About: React.FC = () => {
     loadFont();
   }, []);
 
-  // Draw rough.js rectangle background
+  // Draw rough.js rectangle outline (no fill - image will be the fill)
   useEffect(() => {
     const canvas = rectangleCanvasRef.current;
     if (!canvas || !fontLoaded) return;
@@ -100,18 +102,17 @@ const About: React.FC = () => {
 
     const rc = rough.canvas(canvas);
     
-    // Draw the sketchy rectangle background (lighter green)
+    // Draw simple rectangle outline like the buttons
     rc.rectangle(10, 10, canvasWidth - 20, canvasHeight - 20, {
-      fill: '#a7f3d0', // Lighter green to match reference
-      fillStyle: 'solid',
       stroke: '#000',
-      strokeWidth: 3,
-      roughness: 1.2,
-      bowing: 2,
+      strokeWidth: 4,
+      roughness: 1.8,
+      bowing: 1,
+      seed: isRectangleHovered ? 2 : 1, // Change seed on hover for variation
     });
-  }, [fontLoaded]);
+  }, [fontLoaded, isRectangleHovered]);
 
-  // Draw rough.js circle overlay
+  // Draw rough.js circle outline (no fill - image will be the fill)
   useEffect(() => {
     const canvas = circleCanvasRef.current;
     if (!canvas || !fontLoaded) return;
@@ -128,21 +129,20 @@ const About: React.FC = () => {
 
     const rc = rough.canvas(canvas);
     
-    // Draw the sketchy circle overlay (lighter yellow)
+    // Draw the sketchy circle outline only (no fill, image will be behind it) with different seed on hover
     rc.circle(canvasWidth / 2, canvasHeight / 2, 240, { // Increased circle size
-      fill: '#fde68a', // Lighter yellow to match reference
-      fillStyle: 'solid',
       stroke: '#000',
-      strokeWidth: 3,
+      strokeWidth: 4,
       roughness: 1.2,
       bowing: 2,
+      seed: isCircleHovered ? 2 : 1, // Change seed on hover for variation
     });
-  }, [fontLoaded]);
+  }, [fontLoaded, isCircleHovered]);
 
   const currentTab = tabs.find(tab => tab.id === activeTab) || tabs[0];
 
   return (
-    <section className="section bg-white py-24">
+    <section className="section bg-transparent py-24">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Section Header */}
         <div className="px-8 sm:px-6 lg:px-8" style={{ marginBottom: '20px' }}>
@@ -207,31 +207,71 @@ const About: React.FC = () => {
 
           {/* Overlapping Images - Right Side */}
           <div className="lg:w-1/2">
-            <div className="relative flex justify-center items-center min-h-[450px]">
-              {/* Rectangle Background (Green) */}
-              <div className="absolute z-10 top-0 right-0">
-                <canvas
-                  ref={rectangleCanvasRef}
-                  className="transition-all duration-300 hover:scale-105"
-                  style={{ 
-                    width: '350px',
-                    height: '420px',
-                    filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.1))'
-                  }}
-                />
+            <div className="relative flex justify-center items-center min-h-[500px]">
+              {/* Rectangle with Image Fill */}
+              <div 
+                className="absolute z-10 top-0 right-0 transition-all duration-300 hover:scale-105"
+                onMouseEnter={() => setIsRectangleHovered(true)}
+                onMouseLeave={() => setIsRectangleHovered(false)}
+              >
+                <div className="relative" style={{ width: '350px', height: '420px' }}>
+                  {/* Image as background/fill */}
+                  <div className="absolute inset-0 z-0" style={{ padding: '10px' }}>
+                    <img 
+                      src="/src/assets/images/himanshu_image_2.JPG" 
+                      alt="Himanshu workspace"
+                      className="w-full h-full object-cover"
+                      style={{ objectPosition: 'center' }}
+                    />
+                  </div>
+                  {/* Rough.js outline on top */}
+                  <canvas
+                    ref={rectangleCanvasRef}
+                    className="absolute inset-0 pointer-events-none z-10"
+                    style={{ 
+                      width: '350px',
+                      height: '420px',
+                      filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.1))'
+                    }}
+                  />
+                </div>
               </div>
 
-              {/* Circle Overlay (Yellow) */}
-              <div className="absolute z-20 bottom-0 left-0">
-                <canvas
-                  ref={circleCanvasRef}
-                  className="transition-all duration-300 hover:scale-105"
-                  style={{ 
-                    width: '280px',
-                    height: '280px',
-                    filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.15))'
-                  }}
-                />
+              {/* Circle with Image Fill */}
+              <div 
+                className="absolute z-20 bottom-0 left-0 transition-all duration-300 hover:scale-105"
+                onMouseEnter={() => setIsCircleHovered(true)}
+                onMouseLeave={() => setIsCircleHovered(false)}
+              >
+                <div className="relative" style={{ width: '280px', height: '280px' }}>
+                  {/* Image as background/fill - circular crop matching rough.js circle diameter */}
+                  <div 
+                    className="absolute z-0 overflow-hidden rounded-full" 
+                    style={{ 
+                      top: '25px', 
+                      left: '25px', 
+                      width: '230px', 
+                      height: '230px'
+                    }}
+                  >
+                    <img 
+                      src="/src/assets/images/Jimanshu_image_3.jpg" 
+                      alt="Himanshu"
+                      className="w-full h-full object-cover"
+                      style={{ objectPosition: 'center' }}
+                    />
+                  </div>
+                  {/* Rough.js outline on top */}
+                  <canvas
+                    ref={circleCanvasRef}
+                    className="absolute inset-0 pointer-events-none z-10"
+                    style={{ 
+                      width: '280px',
+                      height: '280px',
+                      filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.15))'
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>

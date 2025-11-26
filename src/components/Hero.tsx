@@ -157,7 +157,7 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      <section className="section bg-gray-50">
+      <section className="section bg-transparent">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-[80vh]">
             
